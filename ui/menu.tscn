@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://wxjcayi7fl5a"]
+
+[ext_resource type="FontFile" uid="uid://wsjcfwytp0j1" path="res://assets/Font Pack/Boxy-Bold-Font/Boxy-Bold.ttf" id="1_udkah"]
+[ext_resource type="FontFile" uid="uid://xo4fbn0kufve" path="res://assets/Font Pack/retro/retro.ttf" id="2_4c782"]
+
+[node name="Menu" type="Control" unique_id=1644673144]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Title" type="Label" parent="." unique_id=1809157794]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 180.0
+offset_right = 1022.0
+offset_bottom = 234.0
+theme_override_fonts/font = ExtResource("1_udkah")
+theme_override_font_sizes/font_size = 48
+text = "Beyond The last Horizon"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1533321767]
+layout_mode = 0
+offset_left = 494.0
+offset_top = 305.0
+offset_right = 655.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="Start" type="Button" parent="VBoxContainer" unique_id=1947859419]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+text = "Start"
+
+[node name="Options" type="Button" parent="VBoxContainer" unique_id=772290578]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+text = "Options
+"
+
+[node name="Quit" type="Button" parent="VBoxContainer" unique_id=1302882086]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+text = "Quit"
