@@ -1,83 +1,86 @@
 extends CharacterBody2D
 
-# Using @export makes it easy to tweak values in the Inspector without touching code
-@export var WALK_SPEED := 130.0
-@export var CROUCH_SPEED := 65.0
-@export var JUMP_VELOCITY := -350.0
+@export_group("Movement")
+@export var MAX_WALK_SPEED := 160.0
+@export var ACCELERATION    := 1200.0  
+@export var FRICTION        := 1500.0  
+@export var TURNAROUND_MULT := 2.5    
+@export var AIR_RESISTANCE  := 600.0   
 
-@onready var stand_collision: CollisionShape2D = $stand
-@onready var crouch_collision: CollisionShape2D = $crouch
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@export_group("Jump")
+@export var JUMP_IMPULSE    := -380.0
 
-var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
-var is_dead := false
+const VELOCITY_THRESHOLD := 10.0 
+
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var _collision: CollisionShape2D = $HitBox
+
+@onready var _base_height: float = _collision.shape.height
+@onready var _base_y: float = _collision.position.y
+
+var _gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+func _ready() -> void:
+	# Duplicate shape so changes don't affect other instances using the same resource
+	_collision.shape = _collision.shape.duplicate()
 
 func _physics_process(delta: float) -> void:
-	if is_dead: return # Stop processing if dead
-
-	apply_gravity(delta)
-	handle_jump()
+	_apply_gravity(delta)
 	
-	# Get input direction: -1, 0, 1
-	var direction := Input.get_axis("move_left", "move_right")
+	var input_axis := Input.get_axis(&"move_left", &"move_right")
+	var is_grounded := is_on_floor()
+	var is_crouching := is_grounded and Input.is_action_pressed(&"do_crouch")
 	
-	# Handle Crouching state
-	var is_crouching := Input.is_action_pressed("do_crouch") and is_on_floor()
+	_handle_locomotion(input_axis, is_crouching, is_grounded, delta)
 	
-	# Movement logic
-	var target_speed = CROUCH_SPEED if is_crouching else WALK_SPEED
+	# Updated before move_and_slide to sync collision changes with physics frame
+	_tick_collision(is_crouching)
 	
-	if direction != 0:
-		velocity.x = direction * target_speed
-		sprite.flip_h = direction < 0
-	else:
-		# move_toward here makes stopping feel less "snappy" and more natural
-		velocity.x = move_toward(velocity.x, 0, target_speed)
-
 	move_and_slide()
-	
-	# Update visuals
-	update_collision(is_crouching)
-	update_animations(direction, is_crouching)
+	_update_visual_state(input_axis, is_crouching, is_grounded)
 
-func apply_gravity(delta: float) -> void:
+func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		velocity.y += _gravity * delta
 
-func handle_jump() -> void:
-	if Input.is_action_just_pressed("move_up") and is_on_floor():
-		# Optional: prevent jumping while crouching if desired
-		velocity.y = JUMP_VELOCITY
-
-func update_collision(is_crouching: bool) -> void:
-	stand_collision.disabled = is_crouching
-	crouch_collision.disabled = not is_crouching
-
-func update_animations(direction: float, is_crouching: bool) -> void:
-	# 1. AIRBORNE STATES
-	if not is_on_floor():
-		if velocity.y < 0:
-			play_if_new("jump")
-		else:
-			play_if_new("fall")
-		return # Exit early so ground animations don't override air ones
-
-	# 2. GROUND STATES
-	if is_crouching:
-		play_if_new("crouch")
-	elif direction != 0:
-		play_if_new("run")
+func _handle_locomotion(axis: float, crouching: bool, grounded: bool, delta: float) -> void:
+	if crouching:
+		velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
 	else:
-		play_if_new("idle")
+		var accel = ACCELERATION if grounded else AIR_RESISTANCE
+		
+		if axis != 0:
+			var is_turning = sign(axis) != sign(velocity.x) and velocity.x != 0
+			var final_accel = accel * (TURNAROUND_MULT if is_turning else 1.0)
+			velocity.x = move_toward(velocity.x, axis * MAX_WALK_SPEED, final_accel * delta)
+		else:
+			var current_friction = FRICTION if grounded else AIR_RESISTANCE
+			velocity.x = move_toward(velocity.x, 0, current_friction * delta)
+		
+		if grounded and Input.is_action_just_pressed(&"move_up"):
+			velocity.y = JUMP_IMPULSE
 
-# Helper function to prevent animation stuttering
-func play_if_new(anim_name: String) -> void:
-	if sprite.animation != anim_name:
-		sprite.play(anim_name)
+func _tick_collision(crouching: bool) -> void:
+	var target_h := _base_height * (0.7 if crouching else 1.0)
+	
+	if not is_equal_approx(_collision.shape.height, target_h):
+		_collision.shape.height = target_h
+		# Shift Y position to keep the bottom of the shape anchored to the floor
+		_collision.position.y = _base_y + ((_base_height - target_h) * 0.5)
 
-func die() -> void:
-	if is_dead: return
-	is_dead = true
-	# Play a death animation here if you have one!
-	sprite.play("die") # Ensure you have a 'die' animation or remove this line
-	get_tree().create_timer(0.5).timeout.connect(func(): get_tree().reload_current_scene())
+func _update_visual_state(axis: float, crouching: bool, grounded: bool) -> void:
+	if axis != 0 and not crouching:
+		_sprite.flip_h = axis < 0
+
+	if not grounded:
+		_play_if_new(&"jump" if velocity.y < 0 else &"fall")
+	elif crouching:
+		_play_if_new(&"crouch")
+	elif abs(velocity.x) > VELOCITY_THRESHOLD:
+		_play_if_new(&"run")
+	else:
+		_play_if_new(&"idle")
+
+func _play_if_new(anim_name: StringName) -> void:
+	if _sprite.animation != anim_name:
+		_sprite.play(anim_name)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cowcrt72t7sds"
-path="res://.godot/imported/player.png-1c3d952a420719b0e3ffd12d4fd1bb86.ctex"
+uid="uid://dcnhvpwxwtwu"
+path="res://.godot/imported/adventurer-crnr-grb-03.png-ae12329b9d977a97046bccafb12cff6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Player/player.png"
-dest_files=["res://.godot/imported/player.png-1c3d952a420719b0e3ffd12d4fd1bb86.ctex"]
+source_file="res://assets/sprites/Player/Individual Sprites/adventurer-crnr-grb-03.png"
+dest_files=["res://.godot/imported/adventurer-crnr-grb-03.png-ae12329b9d977a97046bccafb12cff6d.ctex"]
 
 [params]
 
