@@ -1,45 +1,132 @@
 [gd_scene format=3 uid="uid://wxjcayi7fl5a"]
 
+[ext_resource type="Script" uid="uid://cbl0bqp1wxkaw" path="res://scripts/controls/menu.gd" id="1_4c782"]
 [ext_resource type="FontFile" uid="uid://wsjcfwytp0j1" path="res://assets/Font Pack/Boxy-Bold-Font/Boxy-Bold.ttf" id="1_udkah"]
 [ext_resource type="FontFile" uid="uid://xo4fbn0kufve" path="res://assets/Font Pack/retro/retro.ttf" id="2_4c782"]
+[ext_resource type="Texture2D" uid="uid://bwywpsj45sk55" path="res://assets/UI Buttons/MediavelFree.png" id="4_2ot4n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ot4n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0bcp5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l8jcj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fcydj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cp6tm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2fd1n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbsda"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cop0s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oumb1"]
 
 [node name="Menu" type="Control" unique_id=1644673144]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_4c782")
+
+[node name="Background" type="PanelContainer" parent="." unique_id=825362779]
+z_index = -1
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
 
 [node name="Title" type="Label" parent="." unique_id=1809157794]
+z_index = 1
 layout_mode = 0
-offset_left = 186.0
-offset_top = 180.0
-offset_right = 1022.0
-offset_bottom = 234.0
+offset_left = 92.0
+offset_top = 200.0
+offset_right = 928.0
+offset_bottom = 311.0
 theme_override_fonts/font = ExtResource("1_udkah")
 theme_override_font_sizes/font_size = 48
-text = "Beyond The last Horizon"
+text = "Beyond The
+ last Horizon"
+uppercase = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1533321767]
+[node name="Vbox-Buttons" type="VBoxContainer" parent="." unique_id=1533321767]
+z_index = 2
 layout_mode = 0
-offset_left = 494.0
-offset_top = 305.0
-offset_right = 655.0
-offset_bottom = 472.0
+offset_left = 816.0
+offset_top = 304.0
+offset_right = 994.0
+offset_bottom = 471.0
+theme_override_constants/separation = 30
+
+[node name="Start" type="Button" parent="Vbox-Buttons" unique_id=1947859419]
+z_index = 2
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2ot4n")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_0bcp5")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_l8jcj")
+text = "START"
+
+[node name="Options" type="Button" parent="Vbox-Buttons" unique_id=772290578]
+z_index = 2
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_fcydj")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_cp6tm")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2fd1n")
+text = "OPTIONS"
+
+[node name="Quit" type="Button" parent="Vbox-Buttons" unique_id=1302882086]
+z_index = 2
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_4c782")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jbsda")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_cop0s")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_oumb1")
+text = "QUIT"
+
+[node name="Board" type="Sprite2D" parent="." unique_id=1057966928]
+position = Vector2(905.00006, 347)
+scale = Vector2(5, 5)
+texture = ExtResource("4_2ot4n")
+region_enabled = true
+region_rect = Rect2(3, 1, 71, 92)
+
+[node name="Vbox-Holder" type="VBoxContainer" parent="." unique_id=1553204332]
+z_index = 1
+layout_mode = 0
+offset_left = 816.0
+offset_top = 304.0
+offset_right = 994.0
+offset_bottom = 471.0
+mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="Start" type="Button" parent="VBoxContainer" unique_id=1947859419]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_4c782")
-theme_override_font_sizes/font_size = 32
-text = "Start"
+[node name="Holder-Start" type="Sprite2D" parent="Vbox-Holder" unique_id=729461388]
+position = Vector2(88, 16)
+scale = Vector2(6.468749, 2.9482756)
+texture = ExtResource("4_2ot4n")
+region_enabled = true
+region_rect = Rect2(224, 34, 32, 29)
 
-[node name="Options" type="Button" parent="VBoxContainer" unique_id=772290578]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_4c782")
-theme_override_font_sizes/font_size = 32
-text = "Options
-"
+[node name="Holder-Options" type="Sprite2D" parent="Vbox-Holder" unique_id=1643195735]
+position = Vector2(88, 89)
+scale = Vector2(6.468749, 2.9482756)
+texture = ExtResource("4_2ot4n")
+region_enabled = true
+region_rect = Rect2(224, 34, 32, 29)
 
-[node name="Quit" type="Button" parent="VBoxContainer" unique_id=1302882086]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_4c782")
-theme_override_font_sizes/font_size = 32
-text = "Quit"
+[node name="Holder-Quit" type="Sprite2D" parent="Vbox-Holder" unique_id=822764294]
+position = Vector2(88, 160.99998)
+scale = Vector2(6.468749, 2.9482756)
+texture = ExtResource("4_2ot4n")
+region_enabled = true
+region_rect = Rect2(224, 34, 32, 29)
+
+[connection signal="pressed" from="Vbox-Buttons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Vbox-Buttons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Vbox-Buttons/Quit" to="." method="_on_quit_pressed"]
